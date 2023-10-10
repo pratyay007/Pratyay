@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>All Access Requests</title>
+	<link rel = "icon" href = 
+"static/pitg_logo.jpeg" 
+        type = "image/x-icon">
+    <meta charset="UTF-8">
+    <meta http=-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"> 
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.2.0/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.4/css/dataTables.bootstrap5.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" crossorigin="anonymous">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/view_all_access_requests.css') }}">
+
+</head> 
+<body>
+    <br>
+    <div class="share">
+        <a><i class="fa-solid fa-user-tie" style="margin-right: 5px;"></i>{{ session['givenname'] }}</a>
+        <div>
+            <ul>
+                <li><a href="/dashboard">Dashboard</a></li>
+                <li><a href="/logout">Logout</a></li>
+            </ul>
+        </div>
+    </div>
+    
+
+    <div class="container pt-4 pb-4">
+<table id="example" class="table table-striped" style="width:100%">
+    <thead>
+        <tr>
+            
+            <th>Tat Task Type</th>
+            <th>Tat Task State</th>
+            <th>Tat Reason</th>
+            <th>Tat Requested ID</th>
+            <th>Tat Resource Name</th>
+            <th>Tat Requested By</th>
+            <th>Tat Approver</th>
+            <th>Tat Time</th>
+            <th>Action</th>
+
+        </tr>
+    </thead>
+    <tbody>
+        {% for user in users %}
+            <tr data-tat-id="{{ user.tat_id }}">
+                <td>{{ user.tat_task_type }}</td>
+                <td>{{ user.tat_task_state }}</td>
+                <td>{{ user.tat_reason }}</td>
+                <td>{{ user.tat_requested_id }}</td>
+                <td>{{ user.tat_resource_group }}</td>
+                {%if user.tat_requested_id.lower() == user.tat_request_by.lower() %}
+                    <td>Self request</td>
+                
+                {% else %}
+                    <td>{{ user.tat_request_by }}</td>
+                {% endif %}    
+    
+                <td>{{ user.tat_approver }}</td>
+                <td>{{ user.tat_time }}</td>
+                <td>
+                    
+                    <span data-status="{{ user.tat_task_state}}"></span>
+                    <input type="hidden" class="tat-id" value="{{ user.tat_id }}">
+                    <input type="hidden" class="tat_requested_id" value="{{ user.tat_requested_id }}"> 
+                    {%if user.tat_task_state == 'pending'%}
+                    <input type="submit" value="Approve" name="Approve" onclick="approve(this)">
+                    <input type="submit" value="Reject" name="Reject" onclick="reject(this)">
+                    {%endif%}
+                </td>
+                
+            </tr>
+        {% endfor %}
+
+    </tbody>
+    <tfoot>
+        <tr>
+            <tr>
+                <th>Tat Task Type</th>
+                <th>Tat Task State</th>
+                <th>Tat Reason</th>
+                <th>Tat Requested ID</th>
+                <th>Tat Resource Name</th>
+                <th>Tat Requested By</th>
+                <th>Tat Approver</th>
+                <th>Tat Time</th>
+                <th>Action</th>
+                
+            </tr>
+        </tr>
+    </tfoot>
+</table>
+
+    </div>
+<script src="https://code.jquery.com/jquery-3.5.1.js"></script>
+<script src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.datatables.net/1.13.4/js/dataTables.bootstrap5.min.js"></script>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        $('#example').DataTable();
+        });
+        function showConfirmationAndRemove(tatId,tat_effected_id, status) {
+            let confirmationMessage = '';
+        
+            if (status === 'approve') {
+                confirmationMessage = 'Do you want to approve the task for deactivation of employee: ' + tat_effected_id + '?';
+            } else if (status === 'reject') {
+                confirmationMessage = 'Do you want to reject the task for deactiavtion of employee: ' + tat_effected_id + '?';
+            }
+        
+            if (confirm(confirmationMessage)) {
+                // User confirmed, send the request to approve or reject
+                if (status === 'approve') {
+                    //alert(tat_effected_id);
+                    approveTask(tatId,tat_effected_id);
+                } else if (status === 'reject') {
+                    //console.log(tatId+" reject");
+                    rejectTask(tatId);
+                }
+            }
+        }
+        
+        function approve(button) {
+            const tatId = $(button).siblings('.tat-id').val();
+            const tat_effected_id = $(button).siblings('.tat_requested_id').val();
+            const currentStatus = $(button).siblings('span').data('status');
+        
+            if (currentStatus === 'pending') {
+                showConfirmationAndRemove(tatId,tat_effected_id, 'approve');
+            } else {
+                //alert('Task is already ' + currentStatus);
+            }
+        }
+        
+        function reject(button) {
+            const tatId = $(button).siblings('.tat-id').val();
+            const tat_effected_id = $(button).siblings('.tat_effected_id').val();
+            const currentStatus = $(button).siblings('span').data('status');
+        
+            if (currentStatus === 'pending') {
+                showConfirmationAndRemove(tatId,tat_effected_id, 'reject');
+            } else {
+                alert('Task is already ' + currentStatus);
+            }
+        }
+        
+        function approveTask(tatId,tat_effected_id, tat_resource_group) {
+            //var tat_effected_id='666666';
+            //alert(tatId);
+            //alert(tat_effected_id);
+            $.ajax({
+                type: "POST",
+                url: "/approve_access",
+                data: JSON.stringify({ tatId: tatId,tat_effected_id: tat_effected_id, tat_resource_group: tat_resource_group }),
+                contentType: "application/json",
+                dataType: 'json',
+                success: function (response) {
+                    if (response.success) {
+                        // Update the UI to show the new status as "approved"
+                        $(`[data-tat-id="${tatId}"]`).remove();
+                        alert('Employee: '+tat_effected_id+' has been deactivated.');
+                    } else {
+                        alert('Failed to approve the task.');
+                    }
+                },
+                error: function () {
+                    alert('Failed to approve the task.');
+                }
+            });
+        }
+        
+        function rejectTask(tatId) {
+            $.ajax({
+                type: "POST",
+                url: "/reject_access",
+                data: JSON.stringify({ tatId: tatId }),
+                contentType: "application/json",
+                dataType: 'json',
+                success: function (response) {
+                    if (response.success) {
+                        // Update the UI to show the new status as "rejected"
+                        $(`[data-tat-id="${tatId}"]`).remove();
+                        alert('Request for deactivation of employee: ' + tat_effected_id + ' has been rejected.');
+                    } else {
+                        alert('Failed to reject the task.');
+                    }
+                },
+                error: function () {
+                    alert('Failed to reject the task.');
+                }
+            });
+        }
+              
+</script>
+
+</body>
+</html>

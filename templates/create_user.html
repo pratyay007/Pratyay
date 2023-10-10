@@ -1,0 +1,93 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<link href='https://fonts.googleapis.com/css?family=Open+Sans:400,300,300italic,400italic,600' rel='stylesheet' type='text/css'>
+<link href="//netdna.bootstrapcdn.com/font-awesome/3.1.1/css/font-awesome.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/create_user.css') }}">
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<title> Create User</title>
+
+<br>
+<div class="testbox">
+  <h1>Create User</h1>
+  <h6> All (*) marked fields are mandatory </h6>
+
+  <form id="create_user" method="post">
+
+    <div class="input-row">
+      <label id="icon" for="fname"><i class="icon-user"></i></label>
+      <input type="text" name="fname" id="fname" placeholder="First Name*" required/>
+    
+      <label id="icon" for="sn"><i class="icon-user"></i></label>
+      <input type="text" name="sn" id="sn" placeholder="Last Name*" required/>
+    </div>
+    
+    <div class="input-row">
+      <label id="icon" for="departmentNumber"><i class="fa fa-group"></i></label>
+      <select name="departmentNumber" id="departmentNumber" required>
+          <option value="" disabled selected>Select Department*</option>
+          <option value="Management">Management</option>
+          <option value="HR">HR</option>
+          <option value="IT">IT</option>
+          <option value="Accounts">Accounts</option>
+          <option value="Sales & Marketing">Sales & Marketing</option>
+      </select>
+
+      <label id="icon" for="designation"><i class="fa fa-child"></i></label>
+      <select name="designation" id="designation" required>
+          <option value="" disabled selected>Select Designation*</option>
+      </select>
+  </div>
+
+  <div class="input-row">
+    <label id="icon" for="mail"><i class="fa fa-envelope-o"></i></label>
+    <input type="email" name="mail" id="mail" placeholder="Email*" required />
+    <span id="errorMail"></span>
+
+  <label id="icon" for="telephoneNumber"><i class="fa fa-phone"></i></label>
+  <input type="tel" name="telephoneNumber" id="telephoneNumber" placeholder="Enter 10 digit Phone"/>
+  </div>
+
+  <div class="input-row">
+    <label id="icon" for="emptype"><i class="fa fa-list-ol"></i></label>
+  <select name="emptype" id="emptype" required>
+    <option value="" disabled selected>Select Employee Type*</option>
+    <option value="Internal">Internal</option>
+    <option value="External">External</option>
+  </select>
+  <label id="icon" for="manager"><i class="fa fa-briefcase"></i></label>
+  <select name="manager" id="manager" required>
+    <option value="" disabled selected>Select a manager*</option>
+    {% for user in dropdown_options %}
+        <option value="{{ user[0] }}">{{ user[1] }}</option>
+    {% endfor %}
+</select>
+  </div>
+
+  <div class="input-row">
+    <label id="icon" for="country"><i class="fa fa-flag-o"></i></label>
+    <input type="text" name="country" id="country" placeholder="Country" />
+    <label id="icon" for="location"><i class="fa fa-map-marker"></i></label>
+  <input type="text" name="location" id="location" placeholder="Location" />
+</div>
+
+  <div>
+    <button type="submit" class="button" id="submitButton">Submit</button>
+  
+  </div>
+  
+  {% if error %}
+  <div class="alert alert-danger">
+    <span class="error-text">{{ error }}</span>
+  </div>
+  {% endif %}
+  
+
+</form>
+</div>
+
+<script src="{{ url_for('static', filename='js/create_user.js') }}"></script>
+
+{% endblock %}

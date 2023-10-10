@@ -1,0 +1,11 @@
+body {
+    padding: 30px;
+    margin: 30px;
+    text-align: center;
+    font-family: 'Open Sans', sans-serif;
+  }
+  
+.alert {
+    width:40%;   
+    left: 330px; 
+ }  

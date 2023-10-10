@@ -1,0 +1,49 @@
+<!-- This is the starting page where user raise request for deactivation-->
+{% extends 'base.html' %}
+
+{% block content %}
+<br>
+<h3 style="text-align: center;"> Employee offboarding / deactivate </h3>
+<br>
+<form action="/disable_employee" method="POST">
+    <div class="input-group mx-auto" style="width: 520px">
+        <div class="form-outline">
+            <input type="text" name="searchFilter" id="form1" class="form-control small-input" />
+            <label class="form-label" for="form1">Search the Employee by Login ID: </label>
+        </div>
+        <button type="submit" class="btn btn-primary">
+            <i class="fas fa-search"></i>
+        </button>
+    </div>
+
+<br>
+{% if error_message %}
+    <div class="alert alert-danger" style="width:20%; margin-left:40%"  role="alert">
+        {{ error_message }}
+      </div>
+{% else %}
+    {% if users %}
+        <div class="card mx-auto" style="width: 520px";>
+            <div class="card-body">
+                <h5 class="card-title">Employee Details:</h5>
+                <p class="card-text">Name: {{ users[0].fullname }}</p>
+                <p class="card-text">Email: {{ users[0].mail }}</p>
+                <p class="card-text">Login ID: {{ users[0].LoginID }}</p>
+            </div>
+        </div>
+        <br>
+        <input type="hidden" name="requested_id" value={{ users[0].LoginID }}>
+        <div class="form-outline mx-auto" style="width: 520px">
+            <textarea class="form-control small-input" name="reason_for_deactivation" id="textAreaExample" rows="4"></textarea>
+            <label class="form-label" for="textAreaExample">Reason for deactivation:</label>
+        </div>
+        
+        <br>
+        <div class="container" style="margin-left: 30%;">
+            <label>Would you like to deactivate? </label>
+            <button type="submit" name="deactivate" value="1" class="btn btn-danger">Deactivate</button>
+        </div>
+    {% endif %}
+{% endif %}
+{% endblock %}
+</form>

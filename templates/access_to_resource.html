@@ -1,0 +1,41 @@
+<!-- This is the starting page where user raise request for acces to resource -->
+
+{% extends 'base.html' %}
+
+{% block content %}
+<br>
+<h3 style="text-align: center;"> Request for access to resource </h3>
+<br>
+<form action="/access_to_resource" method="POST">
+    
+<br>
+
+        <div class="card mx-auto" style="width: 520px";>
+            <div class="card-body">
+                <h5 class="card-title">Employee Details:</h5>
+                <p class="card-text">CN: {{ session['username'] }}</p>
+                <p class="card-text">Name: {{ session['givenname'] }} {{ session['sn'] }}</p>
+            </div>
+        </div>
+        <br>
+        <div class="mx-auto text-center"></div>
+            <select class="form-select" name= "resource_name" aria-label="Default select example" style="width: 250px; margin-left:350px";>
+            <option selected>Choose resource name</option>
+            <option value="cn=pam-imanager-server-access,ou=groups,o=pitg">IDM server access</option>
+            <option value="cn=pam-jump-host-access,ou=groups,o=pitg">Jump host access</option>
+          </select>
+        </div>
+
+        <br>
+        <div class="form-outline mx-auto" style="width: 520px">
+            <textarea class="form-control small-input" name="reason_for_access" id="textAreaExample" rows="4"></textarea>
+            <label class="form-label" for="textAreaExample">Reason:</label>
+        </div>
+        
+        <br>
+        <div class="container" style="margin-left: 30%;">
+            <label>Would you like to submit? </label>
+            <button type="submit" name="access" value="1" class="btn btn-primary">SUBMIT</button>
+        </div>
+{% endblock %}
+</form>

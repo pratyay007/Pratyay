@@ -1,0 +1,53 @@
+{% extends 'base.html' %}
+{% block content %}
+<br>
+
+<h3 style="text-align: center;">Change Your Informations</h3>
+<br>
+<div class="container" style="text-align: center;">
+  <form class="row gy-2 gx-3 align-items-center" method="POST">
+    <div class="col-auto">
+      <div class="form-outline">
+          <input type="text" id="form11Example1" class="form-control" value="{{ session['l'] }}" readonly />
+        <label class="form-label" for="form11Example1">Current Address</label>
+      </div>
+    </div>
+
+
+    <div class="col-auto">
+        <div class="form-outline">
+          <input type="text" id="form11Example3" class="form-control" name="new_address" />
+          <label class="form-label" for="form11Example3">Updated address</label>
+        </div>
+      </div>
+
+    <div class="col-auto">
+      <button type="submit" class="btn btn-warning">Update</button>
+    </div>
+  </form>
+</div>
+
+<br>
+
+    <div class="container" style="text-align: center;">
+      <form class="row gy-2 gx-3 align-items-center">
+    <div class="col-auto">
+      <div class="form-outline">
+          <input type="text" id="form11Example1" class="form-control" value="{{ session['telephoneNumber'] }}" readonly />
+        <label class="form-label" for="form11Example1">Current Phone number</label>
+      </div>
+    </div>
+
+    <div class="col-auto">
+        <div class="form-outline">
+          <input type="text" id="form11Example3" class="form-control" name="new_phone_number" />
+          <label class="form-label" for="form11Example3">Updated Phone number</label>
+        </div>
+      </div>
+
+    <div class="col-auto">
+      <button type="submit" class="btn btn-warning">Update</button>
+    </div>
+  </form>
+</div>
+{% endblock %}

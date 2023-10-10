@@ -1,0 +1,257 @@
+<!-- This is the page for all requests -->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>All requests</title>
+	<link rel = "icon" href = 
+"static/images/pitg_logo.jpeg" 
+        type = "image/x-icon">
+    <meta charset="UTF-8">
+    <meta http=-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"> 
+    <!-- Font Awesome -->
+    <link
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
+    rel="stylesheet"/>
+    <!-- Google Fonts -->
+    <link
+    href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap"
+    rel="stylesheet"/>
+    <!-- MDB -->
+    <link
+    href="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/6.4.2/mdb.min.css"
+    rel="stylesheet"/>
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.2.0/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.4/css/dataTables.bootstrap5.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" crossorigin="anonymous">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/view_all_requests.css') }}">
+
+</head> 
+<body>
+    <br>
+    <div class="share">
+        <a><i class="fa-solid fa-user-tie" style="margin-right: 5px;"></i>{{ session['givenname'] }}</a>
+        <div>
+            <ul>
+                <li><a href="/dashboard">Dashboard</a></li>
+                <li><a href="/logout">Logout</a></li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="container">
+    <button onclick="history.back()" class="btn btn-primary btn-sm">Go Back!</button>
+    </div>
+
+    <!-- <div class="alert alert-primary" role="alert">
+        All requests <i class="fa fa-level-down"></i>
+      </div> -->
+      <div class="container alert alert-info" role="alert">
+        Your requests
+      </div>
+    <div class="container pt-4 pb-4">
+<table id="example" class="table table-striped" style="width:100%">
+    <thead>
+        <tr>
+            
+            <th>Task Type</th>
+            <th>Task State</th>
+            <th>Reason</th>
+            <th>Requested ID</th>
+            <th>Resource Name</th>
+            <th>Requested By</th>
+            <th>Approver</th>
+            <th>Time</th>
+            <th>Action</th>
+
+        </tr>
+    </thead>
+    <tbody>
+        {% for user in users %}
+            {% if session['username'] == user.tat_requested_id or
+                session['username'] == user.tat_request_by or
+                session['username'] == user.tat_approver %}
+                <tr data-tat-id="{{ user.tat_id }}">
+                    <td>{{ user.tat_task_type }}</td>
+                    <td>{{ user.tat_task_state }}</td>
+                    <td>{{ user.tat_reason }}</td>
+                    <td>{{ user.tat_requested_id }}</td>
+                    <td>{{ user.tat_resource_group }}</td>
+                    {%if user.tat_requested_id == user.tat_request_by %}
+                        <td>Self request</td>
+                    
+                    {% else %}
+                        <td>{{ user.tat_request_by }}</td>
+                    {% endif %}    
+        
+                    <td>{{ user.tat_approver }}</td>
+                    <td>{{ user.tat_time }}</td>
+                    <td>
+                        <span data-status="{{ user.tat_task_state}}"></span>
+                        <input type="hidden" class="tat-id" value="{{ user.tat_id }}">
+                        <input type="hidden" class="tat_requested_id" value="{{ user.tat_requested_id }}"> 
+                        <input type="hidden" class="tat_request_by" value="{{ user.tat_request_by }}"> 
+                        <input type="hidden" class="tat_task_type" value="{{ user.tat_task_type }}"> 
+                        <input type="hidden" class="tat_resource_group" value="{{ user.tat_resource_group }}"> 
+                        <input type="hidden" class="tat_reason" value="{{ user.tat_reason }}"> 
+                        <input type="hidden" class="tat_approver" value="{{ user.tat_approver }}"> 
+
+                        {% if session['username'] == user.tat_approver and user.tat_task_state == 'pending' %}
+                        <input type="submit" value="Approve" name="Approve" onclick="approve(this)" class="btn btn-success btn-sm mb-2">
+                        <input type="submit" value="Reject" name="Reject" onclick="reject(this)" class="btn btn-danger btn-sm">
+                        {%endif%}
+                    </td>
+                    
+                </tr>
+                {% endif %}
+        {% endfor %}
+
+    </tbody>
+    <tfoot>
+        <tr>
+            <tr>
+                <th>Task Type</th>
+                <th>Task State</th>
+                <th>Reason</th>
+                <th>Requested ID</th>
+                <th>Resource Name</th>
+                <th>Requested By</th>
+                <th>Approver</th>
+                <th>Time</th>
+                <th>Action</th>
+                
+            </tr>
+        </tr>
+    </tfoot>
+</table>
+
+    </div>
+<script src="https://code.jquery.com/jquery-3.5.1.js"></script>
+<script src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.datatables.net/1.13.4/js/dataTables.bootstrap5.min.js"></script>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        $('#example').DataTable();
+        });
+        function showConfirmationAndRemove(tatId,tat_effected_id,tat_resource_group,tat_reason,tat_task_type,tat_approver,tat_request_by,status) {
+            let confirmationMessage = '';
+        
+            if (status === 'approve') {
+                confirmationMessage = 'Do you want to approve the task for deactivation of employee: ' + tat_effected_id + '?';
+            } else if (status === 'reject') {
+                confirmationMessage = 'Do you want to reject the task for deactiavtion of employee: ' + tat_effected_id + '?';
+            }
+        
+            if (confirm(confirmationMessage)) {
+                // User confirmed, send the request to approve or reject
+                if (status === 'approve') {
+                    //alert(tat_effected_id);
+                    approveTask(tatId,tat_effected_id,tat_resource_group,tat_reason,tat_task_type,tat_approver,tat_request_by);
+                } else if (status === 'reject') {
+                    //console.log(tatId+" reject");
+                    rejectTask(tatId);
+                }
+            }
+        }
+        
+        function approve(button) {
+            const tatId = $(button).siblings('.tat-id').val();
+            const tat_effected_id = $(button).siblings('.tat_requested_id').val();
+            const tat_approver = $(button).siblings('.tat_approver').val();
+            const tat_reason = $(button).siblings('.tat_reason').val();
+            const tat_request_by = $(button).siblings('.tat_request_by').val();
+            const tat_resource_group = $(button).siblings('.tat_resource_group').val();
+            const tat_task_type = $(button).siblings('.tat_task_type').val();
+
+            const currentStatus = $(button).siblings('span').data('status');
+        
+            if (currentStatus === 'pending') {
+                showConfirmationAndRemove(tatId,tat_effected_id,tat_resource_group,tat_reason,tat_task_type,tat_approver,tat_request_by,'approve');
+            } else {
+                //alert('Task is already ' + currentStatus);
+            }
+        }
+        
+        function reject(button) {
+            const tatId = $(button).siblings('.tat-id').val();
+            const tat_effected_id = $(button).siblings('.tat_requested_id').val();
+            const tat_approver = $(button).siblings('.tat_approver').val();
+            const tat_reason = $(button).siblings('.tat_reason').val();
+            const tat_request_by = $(button).siblings('.tat_request_by').val();
+            const tat_resource_group = $(button).siblings('.tat_resource_group').val();
+            const tat_task_type = $(button).siblings('.tat_task_type').val();
+
+            const currentStatus = $(button).siblings('span').data('status');
+        
+            if (currentStatus === 'pending') {
+                showConfirmationAndRemove(tatId,tat_effected_id,tat_resource_group,tat_reason,tat_task_type,tat_approver,tat_request_by,'reject')
+            } else {
+                alert('Task is already ' + currentStatus);
+            }
+        }
+        
+        function approveTask(tatId,tat_effected_id,tat_resource_group,tat_reason,tat_task_type,tat_approver,tat_request_by) {
+            //var tat_effected_id='666666';
+            //alert(tatId);
+            alert(tat_resource_group);
+            $.ajax({
+                type: "POST",
+                url: "/approve",
+                data: JSON.stringify
+                ({ 
+                    tatId: tatId,tat_effected_id: tat_effected_id,tat_request_by: tat_request_by,
+                    tat_resource_group: tat_resource_group,tat_reason: tat_reason,
+                    tat_approver: tat_approver,tat_task_type: tat_task_type
+                }),
+                contentType: "application/json",
+                dataType: 'json',
+                success: function (response) {
+                    if (response.success) {
+                        // Find the row and remove the action buttons
+                        const row = $(`[data-tat-id="${tatId}"]`);
+                        row.find('input[type="submit"]').remove();
+                        alert('Employee: '+tat_effected_id+' has been deactivated.');
+                    } else {
+                        alert('Failed to approve the task.');
+                    }
+                },
+                error: function () {
+                    alert('Failed to approve the task.');
+                }
+            });
+        }
+        
+        function rejectTask(tatId) {
+            $.ajax({
+                type: "POST",
+                url: "/reject",
+                data: JSON.stringify({ tatId: tatId }),
+                contentType: "application/json",
+                dataType: 'json',
+                success: function (response) {
+                    if (response.success) {
+                        // Find the row and remove the action buttons
+                        const row = $(`[data-tat-id="${tatId}"]`);
+                        row.find('input[type="submit"]').remove();
+                        alert('Request for deactivation of employee: ' + tat_effected_id + ' has been rejected.');
+                    } else {
+                        alert('Failed to reject the task.');
+                    }
+                },
+                error: function () {
+                    alert('Failed to reject the task.');
+                }
+            });
+        }
+        
+        
+        
+        
+        
+</script>
+
+</body>
+</html>

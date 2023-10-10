@@ -1,0 +1,171 @@
+<link rel = "icon" href = 
+"static/images/pitg_logo.jpeg" 
+        type = "image/x-icon">
+<!-- Font Awesome -->
+<link
+  href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
+  rel="stylesheet"
+/>
+<!-- Google Fonts -->
+<link
+  href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap"
+  rel="stylesheet"
+/>
+<!-- MDB -->
+<link
+  href="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/6.4.1/mdb.min.css"
+  rel="stylesheet"
+/>
+<!-- Navbar -->
+<nav class="navbar navbar-expand-lg navbar-light bg-white">
+  <!-- Container wrapper -->
+  <div class="container-fluid">
+    <!-- Toggle button -->
+    <button
+      class="navbar-toggler"
+      type="button"
+      data-mdb-toggle="collapse"
+      data-mdb-target="#navbarSupportedContent"
+      aria-controls="navbarSupportedContent"
+      aria-expanded="false"
+      aria-label="Toggle navigation"
+    >
+      <i class="fas fa-bars"></i>
+    </button>
+
+    <!-- Collapsible wrapper -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <!-- Navbar brand -->
+      <a class="navbar-brand mt-2 mt-lg-0" href="#">
+        <img src="{{ url_for('static', filename='images/pitg_logo.jpeg') }}" alt="Logo" width="50" height="50">
+      </a>
+      <!-- Left links -->
+      <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+        <li class="nav-item">
+          <a class="nav-link" href="/dashboard">Dashboard</a>
+        </li>
+
+
+      </ul>
+      <!-- Left links -->
+    </div>
+    <!-- Collapsible wrapper -->
+
+    <!-- Right elements -->
+    
+    <!-- Avatar -->
+    <div class="dropdown">
+      <a
+      class="dropdown-toggle d-flex align-items-center hidden-arrow"
+
+        >
+        <i class="far fa-face-smile"></i>
+          <strong class="d-none d-sm-block ms-1">{{ session['givenname'] }}</strong>
+        </a>
+        
+    </div>
+  </div>
+  <a class="btn btn-primary btn-sm" href="/logout" role="button">Logout<i class="fas fa-arrow-right-from-bracket"></i></a>
+  <!-- Right elements -->
+
+  <!-- Container wrapper -->
+</nav>
+<!-- Navbar -->
+{% block content %}
+{% endblock %}
+
+
+<!-- Footer -->
+<footer class="text-center text-lg-start bg-light text-muted">
+  <!-- Section: Social media -->
+  <section class="d-flex justify-content-center justify-content-lg-between p-4 border-bottom">
+    <!-- Left -->
+
+    <!-- Left -->
+
+    <!-- Right -->
+    <div>
+      <a>
+
+      </a>
+
+    </div>
+    <!-- Right -->
+  </section>
+  <!-- Section: Social media -->
+
+  <!-- Section: Links  -->
+  <section class="">
+    <div class="container text-center text-md-start mt-5">
+      <!-- Grid row -->
+      <div class="row mt-3">
+        <!-- Grid column -->
+        <div class="col-md-3 col-lg-4 col-xl-3 mx-auto mb-4">
+          <!-- Content -->
+          <h6 class="text-uppercase fw-bold mb-4">
+          Company name
+          </h6>
+          
+          <p>
+            ProcessIT Global Pvt Ltd
+          </p>
+        </div>
+        <!-- Grid column -->
+
+
+        <!-- Grid column -->
+        <div class="col-md-3 col-lg-2 col-xl-2 mx-auto mb-4">
+          <!-- Links -->
+          <h6 class="text-uppercase fw-bold mb-4">
+            Get connected with us
+          </h6>
+          <div>
+            <!-- Google -->
+            <a href="https://processitglobal.com/" class="btn btn-danger btn-floating">
+              <i class="fab fa-google"></i>
+            </a>
+            <!-- Linkedin -->
+            <a href="https://in.linkedin.com/company/process-it-global" class="btn btn-primary btn-floating">
+              <i class="fab fa-linkedin-in"></i>
+            </a>
+            <!-- Github -->
+            <a href="https://github.com/ProcessIT-Global" class="btn btn-dark btn-floating">
+              <i class="fab fa-github"></i>
+            </a>
+          </div>
+        </div>
+        <!-- Grid column -->
+
+        <!-- Grid column -->
+        <div class="col-md-4 col-lg-3 col-xl-3 mx-auto mb-md-0 mb-4">
+          <!-- Links -->
+          <h6 class="text-uppercase fw-bold mb-4">Contact</h6>
+          <p><i class="fas fa-home me-3"></i> DL 155, Sector-II, Salt Lake City, Kolkata 700091</p>
+          <p>
+            <i class="fas fa-envelope me-3"></i>
+            contact@processitglobal.com
+
+          </p>
+          <p><i class="fas fa-phone me-3"></i>+91 9836792679</p>
+        </div>
+        <!-- Grid column -->
+      </div>
+      <!-- Grid row -->
+    </div>
+  </section>
+  <!-- Section: Links  -->
+
+  <!-- Copyright -->
+  <div class="text-center p-4" style="background-color: rgba(0, 0, 0, 0.05);">
+    © 2023 Copyright:
+    <a class="text-reset fw-bold" href="https://processitglobal.com/">ProcessIT Global Pvt Ltd</a>
+  </div>
+  <!-- Copyright -->
+</footer>
+<!-- Footer -->
+<!-- MDB -->
+<script
+  type="text/javascript"
+  src="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/6.4.1/mdb.min.js"
+></script>
+
