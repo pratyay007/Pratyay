@@ -3,7 +3,7 @@ from models.ldapModel import LDAPModel
 from models.records import *
 from models.validation import *
 from services.service import *
-from flask_mail import Mail, Message
+from flask_mail import Mail
 from services.search_user import ldap_search
 from services.login_ldap import ldaploginauth
 from services.fetch_total_users import fetch_data_from_ldap
