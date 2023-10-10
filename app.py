@@ -18,8 +18,6 @@ from services.modifyldap3 import *
 from services.all_func import *
 from services.mail_config import *
 
-#Git Hub
-
 load_dotenv(path.join(getcwd(), '.env')) #loading .env file
 
 def create_app():
